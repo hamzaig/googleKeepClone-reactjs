@@ -1,24 +1,50 @@
+import { useState } from "react";
 import logo from './logo.svg';
 import './App.css';
+import Header from './Header';
+import Footer from './Footer';
+import MainNote from './MainNote';
+import Note from './Note';
 
 function App() {
+  const [item, setItem] = useState([]);
+
+  const deleteNote = (id) => {
+    setItem((previousValue) => {
+      return previousValue.filter((currentValue, index) => {
+        return index !== id;
+      });
+    });
+    console.log(item);
+  }
+
+  const passNote = (data) => {
+    setItem((preValue) => {
+      return [
+        ...preValue,
+        data,
+      ];
+    });
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <MainNote passNote={passNote} />
+      <div className="outerDiv">
+        {item.map((val, index) => {
+          return (
+            <Note
+              key={index}
+              id={index}
+              title={val.title}
+              content={val.content}
+              deleteNote={deleteNote}
+            />
+          );
+        })}
+      </div>
+      <Footer />
+    </>
   );
 }
 
